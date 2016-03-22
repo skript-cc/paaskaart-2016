@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="myCanvas" width="200" height="300"></canvas>
+    <script>
+
+      var canvas  = document.getElementById('myCanvas');
+      var context = canvas.getContext('2d');
+      var centerX = 0;
+      var centerY = 0;
+      var radius  = 10;
+      var maxRadius = 30;
+      // var radiusStep = 
+      var eggSize = 1; //max 1.5 for egg form
+      var maxEggSize = 1.5;
+      var eggStep = maxEggSize/eggSize;
+      var randomColor = "rgb("+
+        Math.floor(Math.random()*256)+","+
+        Math.floor(Math.random()*256)+","+
+        Math.floor(Math.random()*256)+
+        ")";
+
+      //fill egg with random color
+      context.fillStyle = randomColor;
+    
+      var drawFrame = setInterval( function() {
+
+          context.save();
+
+          context.translate( canvas.width / 2, canvas.height / 2 );
+
+          // scale context vertically
+          context.scale( 1, eggSize );
+          
+          // draw circle which will be stretched into an oval (with scale function)
+          context.beginPath();
+          context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+
+          context.stroke();
+          
+          // restore to original state
+          context.restore();
+          
+          context.fill();
+          context.lineWidth = 3;
+          context.strokeStyle = randomColor;
+          context.stroke();
+
+          if ( radius < maxRadius ) {
+              radius += 2;
+              centerY += 2;
+          } else {
+            radius = maxRadius;
+          }
+
+          if ( eggSize < 1.5 ) {
+            eggSize += 0.05;
+          } else {
+            eggSize = 1.5;
+          }
+      }, 100);
+
+
+     
+
+      
+    </script>
+  </body>
+</html>      
