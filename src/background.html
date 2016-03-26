@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<img id="background" src="./images/weiland-in-mei.jpg" />
+<script>
+    var canvas = document.getElementById('canvas'),
+            context = canvas.getContext('2d');
+
+    var background = document.getElementById('background');
+    context.drawImage(background, 0, 0);
+</script>
+</body>
+</html>

@@ -2,160 +2,64 @@
 <head>
   <title>Paaskaart 2016</title>
   <meta charset="utf-8">
+    <!--<link href='https://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>-->
+    <!--<link href='https://fonts.googleapis.com/css?family=Candal' rel='stylesheet' type='text/css'>-->
+    <link href='https://fonts.googleapis.com/css?family=Gloria+Hallelujah' rel='stylesheet' type='text/css'>
   <style type="text/css">
+    html, body {
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+    }
+    *, *:before, *:after {
+      box-sizing: inherit;
+    }
     body {
+      font-family: 'Candal'; /* 'Shadows Into Light', cursive; */
       margin: 0;
       padding: 0;
-      background: #ccc;
+      background: #eeedfc;
+    }
+    #container {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      align-items: center;
     }
     #canvas {
       display: block;
       width:100%;
       height: 100%;
+      background: #fff;
+      font-family: 'Gloria Hallelujah';
+    }
+    #card {
+      width:100%;
+      height: 100%;
+      margin: 0 auto;
+      padding: 10px;
       max-width: 500px;
       max-height: 700px;
-      margin: 0 auto;
       background: #fff;
+    }
+    #background, #chick, #bunny, #grass {
+      display: none;
     }
   </style>
 </head>
 <body>
-<canvas id="canvas"></canvas>
-<script type="text/javascript">
+  <div id="container">
+    <div id="card">
+      <canvas id="canvas"></canvas>
+      <img id="background" src="./images/grass-meadow-4.png" />
+      <img id="chick" src="./images/chick.png" />
+      <img id="bunny" src="./images/bunny.png" />
+      <img id="grass" src="./images/grass.png" />
+    </div>
+  </div>
 
-function drawEllipseByCenter(ctx, cx, cy, w, h) {
-  drawEllipse(ctx, cx - w/2.0, cy - h/2.0, w, h);
-}
-
-function drawEllipse(ctx, x, y, w, h) {
-  var kappa = .5522848,
-      ox = (w / 2) * kappa, // control point offset horizontal
-      oy = (h / 2) * kappa, // control point offset vertical
-      xe = x + w,           // x-end
-      ye = y + h,           // y-end
-      xm = x + w / 2,       // x-middle
-      ym = y + h / 2;       // y-middle
-
-  ctx.beginPath();
-  ctx.moveTo(x, ym);
-  ctx.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
-  ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
-  ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
-  ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
-  //ctx.closePath(); // not used correctly, see comments (use to close off open path)
-  ctx.stroke();
-}
-
-function drawEgg (eggPoint)
-{
-  var eggColor = "red",
-      eggWidth = 10,
-      eggHeight = 20,
-      growFactor = 0.2,
-      iteration = 0;
-
-  context.fillStyle = eggColor;
-  context.strokeStyle = eggColor;
-  // context.beginPath();
-  // context.arc(eggPoint.x, eggPoint.y, 5/* radius */, 0, 2 * Math.PI, false);
-  // context.closePath();
-  // context.fill();
-
-  var drawEggFrame = setInterval(function() {
-
-    var eggGrowth = growFactor*iteration,
-        theEggWidth = eggWidth*eggGrowth,
-        theEggHeight = eggHeight*eggGrowth;
-
-      //console.log(eggGrowth);
-
-    drawEllipseByCenter(context, eggPoint.x, eggPoint.y+eggHeight/2, theEggWidth, theEggHeight);
-
-    //context.fill();
-    context.closePath();
-
-    if (theEggWidth >= eggWidth && theEggHeight >= eggHeight) {
-      clearInterval(drawEggFrame);
-    }
-
-    iteration++;
-  }, 100);
-}
-
-function drawLine (x1, y1, x2, y2, brightness) {
-  // draw branch
-  context.beginPath();
-
-  context.moveTo(x1, y1);
-  context.lineTo(x2, y2);
-  context.lineWidth = brightness;
-
-  context.closePath();
-  context.stroke();
-}
-
-function drawTree (x1, y1, angle, depth) {
-  if (depth !== 0)
-  {
-    var branchLength = length*Math.pow(reduction, branches-depth),
-        x2 = x1 + branchLength * (Math.cos(angle * deg_to_rad)),
-        y2 = y1 + branchLength * (Math.sin(angle * deg_to_rad));
-
-    drawLine(x1, y1, x2, y2, depth);
-
-    // save positions for eggs
-    if (Math.random() > 0.8 && branches-depth > 2) {
-      eggPoints.push({x: x2, y: y2});
-    }
-
-    drawTree(x2, y2, angle-divergence, depth-1);
-    drawTree(x2, y2, angle+divergence, depth-1);
-  }
-}
-
-var canvas = document.getElementById('canvas'),
-    context = canvas.getContext('2d'),
-    deg_to_rad = Math.PI / 180.0,
-    eggPoints = [],
-    length = canvas.offsetWidth/3.5,
-    divergence = 25,
-    reduction = 0.7,
-    maxDepth = 9,
-    branches = 1;
-
-context.canvas.width  = canvas.offsetWidth;
-context.canvas.height = canvas.offsetHeight;
-
-var drawFrame = setInterval(function()
-{
-  if (branches >= maxDepth) {
-
-    for (var i=0; i<eggPoints.length; i++) {
-      var eggPoint = eggPoints[i];
-      setTimeout(drawEgg, 50*i, eggPoint);
-    }
-    clearInterval(drawFrame);
-    return;
-  }
-
-  context.strokeStyle = '#000';
-  context.lineWidth = 1;
-
-  // clear canvas
-  context.clearRect(0, 0, canvas.width, canvas.height);
-
-  // draw new tree
-  drawTree(
-    context.canvas.width/2, // start x
-    context.canvas.height, // start y
-    -90, // start angle
-    branches
-  );
-
-  branches++;
-}, 100);
-
-</script>
-
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+  <script src="./js/app.js"></script>
 </body>
 </html>
