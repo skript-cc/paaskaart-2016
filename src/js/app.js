@@ -103,7 +103,7 @@ $(window).load(function()
 
         context.textBaseline = 'top';
         context.shadowBlur = blur;
-        context.font = step + 'pt "Gloria Hallelujah"';
+        context.font = step + 'pt '+fontFamily;
 
         var text = 'Vrolijk Pasen!',
         widthText = context.measureText(text).width,
@@ -130,26 +130,7 @@ $(window).load(function()
         }
     }
 
-    var canvas = document.getElementById('canvas'),
-        context = canvas.getContext('2d'),
-        deg_to_rad = Math.PI / 180.0,
-        eggPoints = [],
-        length = canvas.offsetWidth/3.5,
-        divergence = 25,
-        reduction = 0.7,
-        maxDepth = 9,
-        branches = 1;
-
-    context.canvas.width  = canvas.offsetWidth;
-    context.canvas.height = canvas.offsetHeight;
-
-    var background = document.getElementById( 'background' ),
-    	bunny = document.getElementById( 'bunny' ),
-      grass = document.getElementById( 'grass' ),
-    	bunnyX = context.canvas.width/15,
-    	bunnyY = context.canvas.height - 2*context.canvas.height/7;
-
-    var drawFrame = setInterval(function drawFrameHandler ()
+    function drawFrameHandler ()
     {
         if (branches >= maxDepth)
         {
@@ -209,6 +190,39 @@ $(window).load(function()
 
         //draw the front layer grass with yellow glow
         context.drawImage( grass, 0, context.canvas.height - grass.height, context.canvas.width, grass.height );
+    }
 
-    }, 100);
+    var canvas = document.getElementById('canvas'),
+        context = canvas.getContext('2d'),
+        deg_to_rad = Math.PI / 180.0,
+        eggPoints = [],
+        length = canvas.offsetWidth/3.5,
+        divergence = 25,
+        reduction = 0.7,
+        maxDepth = 9,
+        branches = 1,
+        drawFrame,
+        fontFamily = '';
+
+    context.canvas.width  = canvas.offsetWidth;
+    context.canvas.height = canvas.offsetHeight;
+
+    var background = document.getElementById( 'background' ),
+    	bunny = document.getElementById( 'bunny' ),
+      grass = document.getElementById( 'grass' ),
+    	bunnyX = context.canvas.width/15,
+    	bunnyY = context.canvas.height - 2*context.canvas.height/7;
+
+    WebFont.load({
+      google: {
+        families: ['Gloria Hallelujah']
+      },
+      active: function () {
+        fontFamily = '"Gloria Hallelujah"';
+        drawFrame = setInterval(drawFrameHandler, 100);
+      },
+      inactive: function () {
+        drawFrame = setInterval(drawFrameHandler, 100);
+      }
+    });
 });
